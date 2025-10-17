@@ -1,1 +1,65 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Input Plat & Warna</title>
+  <!-- Jika CSS ada di ../asets -->
+  <link rel="stylesheet" href="../Asets/Hal-iden.css">
+</head>
+<body>
+  <div class="center-form">
+    <form id="platForm" autocomplete="off">
+      <div class="input-group">
+        <input type="text"
+               id="plat"
+               class="custom-input plat"
+               maxlength="9"
+               autocomplete="off"
+               required
+               spellcheck="false"
+        />
+        <div class="input-underline"></div>
+      </div>
+      <div class="input-group">
+        <input type="text"
+               id="warna"
+               class="custom-input warna"
+               autocomplete="off"
+               required
+               spellcheck="false"
+        />
+        <div class="input-underline"></div>
+      </div>
+      <button class="circle-btn" type="submit">simpan</button>
+    </form>
+  </div>
+  <script>
+    // Validasi plat nomor
+    const platInput = document.getElementById('plat');
+    platInput.addEventListener('input', function(e) {
+      let v = platInput.value.toUpperCase();
+      v = v.replace(/[^A-Z0-9]/g, '');
+      let part1 = v.match(/^[A-Z]{0,2}/) ? v.match(/^[A-Z]{0,2}/)[0] : '';
+      let part2 = v.substr(part1.length).match(/^[0-9]{0,4}/) ? v.substr(part1.length).match(/^[0-9]{0,4}/)[0] : '';
+      let part3 = v.substr(part1.length + part2.length).match(/^[A-Z]{0,3}/) ? v.substr(part1.length + part2.length).match(/^[A-Z]{0,3}/)[0] : '';
+      platInput.value = (part1 + part2 + part3).substr(0,9);
+    });
 
+    // Validasi warna
+    const warnaInput = document.getElementById('warna');
+    warnaInput.addEventListener('input', function(e) {
+      warnaInput.value = warnaInput.value.replace(/[^a-zA-Z\s]/g, '');
+    });
+
+    // Kirim ke halaman QR dan simpan data di localStorage
+    document.getElementById('platForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      localStorage.setItem('plat', platInput.value);
+      localStorage.setItem('warna', warnaInput.value);
+      // Ganti path berikut sesuai lokasi file halaman QR kamu!
+      location.href = '../pages/qr.html';
+    });
+  </script>
+</body>
+</html>
