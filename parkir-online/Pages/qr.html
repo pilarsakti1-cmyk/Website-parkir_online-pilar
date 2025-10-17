@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Anda Masuk</title>
+  <link rel="stylesheet" href="../Asets/Qr.css">
+  <!-- Library QRCode.js (offline CDN) -->
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+  <div class="container">
+    <div class="white-box">
+      <div class="judul">Anda masuk pada</div>
+      <div class="tanggal" id="info-tanggal"></div>
+      <div class="jam" id="info-jam"></div>
+      <div class="petunjuk">
+        Ambil gambar QR dibawah ini dan<br>
+        kamu bisa menutup web sekarang
+      </div>
+      <div id="qrcode"></div>
+    </div>
+  </div>
+  <script>
+    // Ambil data kendaraan dari localStorage (setelah input halaman sebelumnya)
+    let plat = localStorage.getItem('plat') || 'BELUM DIISI';
+    let warna = localStorage.getItem('warna') || 'BELUM DIISI';
+
+    // Buat waktu sekarang
+    const now = new Date();
+    const tgl = now.getDate();
+    const bln = now.getMonth() + 1;
+    const thn = now.getFullYear();
+    const jam = now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
+
+    // Tampilkan ke layar
+    document.getElementById('info-tanggal').textContent = `${tgl} - ${bln} - ${thn}`;
+    document.getElementById('info-jam').textContent = jam;
+
+    // Data QR
+    const dataQR = JSON.stringify({
+      plat: plat,
+      warna: warna,
+      tanggal: `${tgl}-${bln}-${thn}`,
+      jam: jam
+    });
+
+    // Generate QR
+    new QRCode(document.getElementById("qrcode"), {
+      text: dataQR,
+      width: 220,
+      height: 220,
+      colorDark : "#000",
+      colorLight : "#fff",
+      correctLevel : QRCode.CorrectLevel.H
+    });
+  </script>
+</body>
+</html>
